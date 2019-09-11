@@ -1,0 +1,201 @@
+/*Names: David Chavez, Danny Viveros, Jessica Perez, Kevin Nguyen, Uchenna Nzeadibe
+ 
+ Date: 3/19/2019
+ 
+ This program is written to help calculate monthly installment loans.
+ 
+ Financial Calculator
+ */
+// introduction for the main library //
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <fstream>
+#include <cstdio>
+
+using namespace std;
+void displayFile(string);   // This will display the user's file//
+void showMenu(); // this will call the menu function //
+
+float finalbalance(float, float);   // floating point for the final balance //
+float interest(float, float);      //  floating point for the interest rate //
+float principal(float, float);     // Floating  point for the principal //
+
+// Starting main function //
+int main()
+{            // begining of blockstatement //
+    
+    // String Variables  to hold the names of users input including the file//
+    
+    string firstName,
+    lastName,
+    fileName,
+    Title,
+    file1;
+    
+    //  The variables for the program are being identified here //
+    int  period;
+    
+    //Float variables //
+    float  monthlyPayment,
+    initialAmount,
+    downPayment,
+    Interest,
+    APR,
+    FinalBalance,
+    Principal;
+    
+    const int newFile1 = 1,
+    oldFile = 2,
+    exitProgram = 3;
+    
+    int choice;  // holding choice option //
+    
+    //Using the do loop to use the menu display //
+    do
+    { // Opening block statement //
+        
+        // Menu Display //
+        showMenu(); // This is the call function for void showMenu //
+        cin >> choice; // This hold the choice //
+        
+        //User Input Validation using the while loop//
+        while (choice < newFile1 || choice > exitProgram)
+        {
+            cout << "Please enter a valid menu choice: ";
+            cin >> choice;
+        }
+        //Process User's Selection using choice 1//
+        
+        if (choice == newFile1)
+        {
+            // Opening string users input of creating a file//
+            cout << " \n";
+            cout << "what would you like to name this file as? Please make sure you include .txt at the end of the file name.\n";
+            cin >> file1;
+            cout << " \n";
+            cout << "File Created..." << endl;
+            
+            ofstream outputFile;
+            outputFile.open(file1); // creates file based on user input
+            
+            cout << setw(40) << "Financial Calculator" << endl;
+            cout << setw(55) << "________________________________________________\n";
+            cout << " " << endl;
+            cout << "What is your first and last name? " << endl;
+            cin >> firstName >> lastName;
+            cout << "What is the amount that you owe? " << endl;
+            cin >> initialAmount;
+            while (initialAmount < 0) //using the while loop to get the initial amount //
+            {
+                cout << "Please enter a valid number" << endl;
+                cin >> initialAmount;
+            }
+            cout << "What was your down payment? " << endl;
+            cin >> downPayment;
+            while (downPayment < 0)
+            {
+                cout << "Please enter a valid number" << endl;
+                cin >> downPayment;
+            }
+            cout << "What is your monthly payment? " << endl;
+            cin >> monthlyPayment;
+            while (monthlyPayment < 0)
+            {
+                cout << "Please enter a valid number" << endl;
+                cin >> monthlyPayment;
+            }
+            cout << "What is your APR? Please type in decimal form." << endl;
+            cin >> APR;
+            while (APR < 0)
+            {
+                cout << "Please enter a valid number" << endl;
+                cin >> APR;
+            }
+            cout << "What is your payment length " << endl;
+            cin >> period;
+            while (period < 0)
+            {
+                cout << "Please enter a valid time frame" << endl;
+                cin >> period;
+            }
+            // Formulas need it for the main function//
+            FinalBalance = finalbalance(initialAmount, monthlyPayment);
+            Interest = interest(initialAmount, APR);
+            Principal = principal(monthlyPayment, Interest);
+            finalbalance(initialAmount, monthlyPayment);
+            interest(initialAmount, APR);
+            
+            outputFile << "First name: " << firstName << endl;
+            outputFile << "Last name: " << lastName << endl;
+            outputFile << "Initial Amount: " << initialAmount << endl;
+            outputFile << "Down payment amount: " << downPayment << endl;
+            outputFile << "Committed monthly payment: " << monthlyPayment << endl;
+            outputFile << "APR:" << APR << endl;
+            outputFile << "Payment length: " << period << endl;
+            outputFile << " " << endl;
+            outputFile << "__________________________________" << endl;
+            outputFile << "Your interest payment will be " << Interest << endl;
+            outputFile << "Your principal payment will be " << Principal << endl;
+            outputFile << "The final balance you owe is " << FinalBalance << endl;
+            cout << " \n";
+            // closing the file //
+            outputFile.close();
+            cout << "File saved." << endl;
+        }
+        else if (choice == oldFile)  //opening the old file
+        {
+            string file2;
+            
+            cout << " \n";
+            cout << "Please type in the name of the previous file following with .txt you wish to preview." << endl;
+            cin >> file2;
+            //start of old file2
+            cout << " \n";
+            displayFile(file2);
+        }
+    } while (choice != exitProgram);
+    return 0;
+}
+
+void showMenu() // Idenityfiying the function to show the menu options//
+{
+    cout << " \n\tFinancial Calculator \n"
+    << setw(36) << "_________________________________\n"
+    << "\n"
+    << "1) Create a New file\n"
+    << "2) Open an Old File\n"
+    << "3) Exit the Program\n"
+    << " Please type in your choice: ";
+}
+
+void displayFile(string file2) // Idenitifying the fucntion to display the file //
+{
+    string getcontent;
+    ifstream openfile(file2);
+    
+    if (openfile.is_open())
+    {
+        while (!openfile.eof())
+        {
+            getline(openfile, getcontent);
+            cout << getcontent << endl;
+        }
+    }
+}
+
+float finalbalance(float initialAmount, float monthlyPayment) // floating parameters for the initial amount and the monthly payment //
+{
+    return initialAmount - monthlyPayment;
+}
+
+float interest(float initialAmount2, float APR)
+{
+    return ((initialAmount2*APR) / 12);
+}
+
+float principal(float monthlyPayment, float Interest)
+{
+    return monthlyPayment - Interest;
+}
+m,n
